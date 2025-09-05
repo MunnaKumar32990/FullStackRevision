@@ -14,17 +14,18 @@ pipeline {
         }
 
         // ===== FRONTEND DEPLOY =====
-        stage('Deploy Frontend to Tomcat') {
-            steps {
-                bat '''
-                if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement" (
-                    rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement"
-                )
-                mkdir "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement"
-                xcopy /E /I /Y EmployeeManagement-Frontend\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement"
-                '''
-            }
-        }
+stage('Deploy Frontend to Tomcat') {
+    steps {
+        bat '''
+        if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement" (
+            rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement"
+        )
+        mkdir "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement"
+        xcopy /E /I /Y Frontend\\employee-frontend\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement"
+        '''
+    }
+}
+
 
         // ===== BACKEND BUILD =====
         stage('Build Backend') {
