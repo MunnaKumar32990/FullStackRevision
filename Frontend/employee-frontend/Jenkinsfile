@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven3'   // must match Jenkins Global Tool config
+        maven 'Maven'   // must match Jenkins Global Tool config
         jdk 'JDK21'      // must match Jenkins Global Tool config
         nodejs 'Node16'  // install NodeJS plugin in Jenkins, name it Node16
     }
