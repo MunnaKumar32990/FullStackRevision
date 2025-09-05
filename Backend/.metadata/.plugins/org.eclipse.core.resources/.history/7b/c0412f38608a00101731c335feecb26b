@@ -1,0 +1,50 @@
+package com.example.demo.Controller;
+
+import com.example.demo.model.Employee;
+import com.example.demo.repository.EmployeeRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/employees")
+@CrossOrigin(origins = "http://localhost:3000") // allow React frontend
+public class EmployeeController {
+
+    private final EmployeeRepository repository;
+
+    public EmployeeController(EmployeeRepository repository) {
+        this.repository = repository;
+    }
+
+    @GetMapping
+    public List<Employee> getAllEmployees() {
+        return repository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Employee getEmployee(@PathVariable Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @PostMapping
+    public Employee createEmployee(@RequestBody Employee employee) {
+        return repository.save(employee);
+    }
+
+    @PutMapping("/{id}")
+    public Employee updateEmployee(@PathVariable Long id, @RequestBody Employee newEmployee) {
+        return repository.findById(id).map(emp -> {
+            emp.setName(newEmployee.getName());
+            emp.setEmail(newEmployee.getEmail());
+            emp.setPosition(newEmployee.getPosition());
+            return repository.save(emp);
+        }).orElse(null);
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteEmployee(@PathVariable Long id) {
+        repository.deleteById(id);
+        return "Employee deleted with id: " + id;
+    }
+}
