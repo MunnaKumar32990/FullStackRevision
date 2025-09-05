@@ -2,51 +2,49 @@ pipeline {
     agent any
 
     stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/MunnaKumar32990/Fullstackrevision.git'
+            }
+        }
 
-        // ===== FRONTEND BUILD =====
         stage('Build Frontend') {
             steps {
-                dir('Frontend/employee-frontend') {
+                dir('FullStack/Frontend/employee-frontend') {
                     bat 'npm install'
                     bat 'npm run build'
                 }
             }
         }
 
-        // ===== FRONTEND DEPLOY =====
-stage('Deploy Frontend to Tomcat') {
-    steps {
-        bat '''
-        if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement" (
-            rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement"
-        )
-        mkdir "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement"
-        xcopy /E /I /Y Frontend\\employee-frontend\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employeemanagement"
-        '''
-    }
-}
+        stage('Deploy Frontend to Tomcat') {
+            steps {
+                bat '''
+                if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend" (
+                    rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
+                )
+                mkdir "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
+                xcopy /E /I /Y FullStack\\Frontend\\employee-frontend\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
+                '''
+            }
+        }
 
-
-        // ===== BACKEND BUILD =====
         stage('Build Backend') {
             steps {
-                dir('EmployeeManagement-Backend') {
+                dir('FullStack/EmployeeManagement') {
                     bat 'mvn clean package -DskipTests'
                 }
             }
         }
 
-        // ===== BACKEND DEPLOY =====
         stage('Deploy Backend to Tomcat') {
             steps {
                 bat '''
                 if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war" (
                     del /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
                 )
-                if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement" (
-                    rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement"
-                )
-                copy "EmployeeManagement-Backend\\target\\*.war" "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
+                copy FullStack\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
                 '''
             }
         }
@@ -54,10 +52,10 @@ stage('Deploy Frontend to Tomcat') {
 
     post {
         success {
-            echo '✅ Deployment Successful! Access app at: http://localhost:8080/EmployeeManagement'
+            echo "✅ Pipeline executed successfully!"
         }
         failure {
-            echo '❌ Pipeline Failed.'
+            echo "❌ Pipeline Failed."
         }
     }
 }
