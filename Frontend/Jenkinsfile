@@ -4,20 +4,20 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/MunnaKumar32990/FullStackRevision.git'
+                // No explicit git step; let Jenkins handle SCM checkout automatically
+                echo "Checking out code..."
             }
         }
 
-        stage('Debug Files') {
+        stage('List Files') {
             steps {
-                bat 'dir FullStack\\Frontend\\employee-frontend'
+                bat 'dir Frontend\\employee-frontend'
             }
         }
 
         stage('Build Frontend') {
             steps {
-                dir('FullStack/Frontend/employee-frontend') {
+                dir('Frontend/employee-frontend') {
                     bat 'npm install'
                     bat 'npm run build'
                 }
@@ -31,14 +31,14 @@ pipeline {
                     rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
                 )
                 mkdir "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
-                xcopy /E /I /Y FullStack\\Frontend\\employee-frontend\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
+                xcopy /E /I /Y Frontend\\employee-frontend\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
                 '''
             }
         }
 
         stage('Build Backend') {
             steps {
-                dir('FullStack/EmployeeManagement') {
+                dir('Backend') {
                     bat 'mvn clean package -DskipTests'
                 }
             }
@@ -50,7 +50,7 @@ pipeline {
                 if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war" (
                     del /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
                 )
-                copy FullStack\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
+                copy Backend\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
                 '''
             }
         }
