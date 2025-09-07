@@ -63,7 +63,7 @@ function App() {
       <form onSubmit={handleSubmit} className="form">
         <input
           type="text"
-          name="name"
+          name="enter name"
           value={form.name}
           onChange={handleChange}
           placeholder="Name"
@@ -71,7 +71,7 @@ function App() {
           className="input"
         />
         <input
-          type="email"
+          type="enter email"
           name="email"
           value={form.email}
           onChange={handleChange}
@@ -107,7 +107,7 @@ function App() {
                 onClick={() => handleDelete(emp.id)}
                 className="delete-btn"
               >
-                Delete
+                Delete 
               </button>
             </div>
           </li>
