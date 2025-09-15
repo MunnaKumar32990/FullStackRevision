@@ -44,7 +44,8 @@ pipeline {
                 bat '''
                 if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war" (
                     del /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
-                )if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement" (
+                )
+                if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement" (
                     rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement"
                 )
                 copy Backend\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
