@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "./index.css"; // ✅ Import styles
+import "./index.css"; 
 
-const API_URL = "http://localhost:8080/api/employees";
+import config from "./config";
+
+const API_URL = `${config.url}/employees`;
+
 
 function App() {
   const [employees, setEmployees] = useState([]);
@@ -16,31 +19,38 @@ function App() {
   const fetchEmployees = async () => {
     try {
       const res = await axios.get(API_URL);
-      setEmployees(res.data);
+      setEmployees(Array.isArray(res.data) ? res.data : []);
     } catch (err) {
       console.error("Error fetching employees:", err);
+      setEmployees([]);
     }
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      if (editing) {
-        await axios.put(`${API_URL}/${editing.id}`, form);
-        setEditing(null);
-      } else {
-        await axios.post(API_URL, form);
-      }
-      setForm({ name: "", email: "", position: "" });
-      fetchEmployees();
-    } catch (err) {
-      console.error("Error saving employee:", err);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    if (editing) {
+      const response = await axios.put(`${API_URL}/${editing.id}`, form);
+      console.log('Update response:', response);
+      setEditing(null);
+    } else {
+      const response = await axios.post(API_URL, form);
+      console.log('Create response:', response);
     }
-  };
+    setForm({ name: "", email: "", position: "" });
+    fetchEmployees();
+  } catch (err) {
+    console.error("Error saving employee:", err);
+    console.error("API URL:", API_URL);
+    console.error("Form data:", form);
+  }
+};
+
 
   const handleEdit = (employee) => {
     setForm(employee);
@@ -63,7 +73,7 @@ function App() {
       <form onSubmit={handleSubmit} className="form">
         <input
           type="text"
-          name="enter name"
+          name="name"
           value={form.name}
           onChange={handleChange}
           placeholder="Name"
@@ -71,7 +81,7 @@ function App() {
           className="input"
         />
         <input
-          type="enter email"
+          type="email"
           name="email"
           value={form.email}
           onChange={handleChange}
@@ -94,7 +104,7 @@ function App() {
       </form>
 
       <ul className="list">
-        {employees.map((emp) => (
+        {Array.isArray(employees) && employees.map((emp) => (
           <li key={emp.id} className="list-item">
             <span>
               <strong>{emp.name}</strong> ({emp.email}) - {emp.position}
@@ -103,11 +113,8 @@ function App() {
               <button onClick={() => handleEdit(emp)} className="edit-btn">
                 Edit
               </button>
-              <button
-                onClick={() => handleDelete(emp.id)}
-                className="delete-btn"
-              >
-                Delete 
+              <button onClick={() => handleDelete(emp.id)} className="delete-btn">
+                Delete
               </button>
             </div>
           </li>

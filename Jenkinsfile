@@ -12,7 +12,7 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
-                dir('FullStack/Frontend/employee-frontend') {
+                dir('Frontend/employee-frontend') {
                     bat 'npm install'
                     bat 'npm run build'
                 }
@@ -33,8 +33,8 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('FullStack/EmployeeManagement') {
-                    bat 'mvn clean package -DskipTests'
+                dir('Backend/EmployeeManagement') {
+                    bat 'mvn clean package'
                 }
             }
         }
@@ -44,8 +44,10 @@ pipeline {
                 bat '''
                 if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war" (
                     del /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
+                )if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement" (
+                    rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement"
                 )
-                copy FullStack\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
+                copy FullStack\\Backend\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
                 '''
             }
         }
