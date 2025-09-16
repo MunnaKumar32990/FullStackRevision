@@ -48,7 +48,7 @@ pipeline {
                 if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement" (
                     rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement"
                 )
-                copy FULLSTACK\\Backend\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
+                copy FullStack-Practise\\Backend\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
                 '''
             }
         }
