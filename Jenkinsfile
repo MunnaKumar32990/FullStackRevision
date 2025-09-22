@@ -33,7 +33,7 @@ pipeline {
 
         stage('Build Backend') {
             steps {
-                dir('FullStack/Backend/EmployeeManagement') {
+                dir('EmployeeManagement') {
                     bat 'mvn clean package'
                 }
             }
