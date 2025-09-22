@@ -1,7 +1,5 @@
 const config = {
-
-
-  url: "http://localhost:2030" // Adjust port number to match your backend
+  url: "http://localhost:2030/EmployeeManagement"
 };
 
 export default config;
