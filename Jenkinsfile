@@ -35,8 +35,6 @@ pipeline {
             steps {
                 dir('FullStack/EmployeeManagement') {
                     bat 'mvn clean package'
-                dir('Backend/EmployeeManagement') {
-                    bat 'mvn clean package'
                 }
             }
         }
@@ -51,10 +49,6 @@ pipeline {
                     rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement"
                 )
                 copy FullStack\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\"
-                if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement" (
-                    rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement"
-                )
-                copy Backend\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
                 '''
             }
         }
