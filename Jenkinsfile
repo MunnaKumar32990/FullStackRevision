@@ -12,7 +12,7 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
-                dir('FullStack/Frontend/employee-frontend') {
+                dir('Frontend/employee-frontend') {
                     bat 'npm install'
                     bat 'npm run build'
                 }
@@ -26,7 +26,7 @@ pipeline {
                     rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
                 )
                 mkdir "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
-                xcopy /E /I /Y FullStack\\Frontend\\employee-frontend\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
+                xcopy /E /I /Y Frontend\\employee-frontend\\dist\\* "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\employee-frontend"
                 '''
             }
         }
@@ -34,6 +34,8 @@ pipeline {
         stage('Build Backend') {
             steps {
                 dir('FullStack/EmployeeManagement') {
+                    bat 'mvn clean package'
+                dir('Backend/EmployeeManagement') {
                     bat 'mvn clean package'
                 }
             }
@@ -49,6 +51,10 @@ pipeline {
                     rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement"
                 )
                 copy FullStack\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\"
+                if exist "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement" (
+                    rmdir /S /Q "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement"
+                )
+                copy Backend\\EmployeeManagement\\target\\*.war "C:\\Program Files\\Apache Software Foundation\\Tomcat 10.1\\webapps\\EmployeeManagement.war"
                 '''
             }
         }
